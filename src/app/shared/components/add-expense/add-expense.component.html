@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Expense</ion-title>
+    <ion-button slot = "end" fill = "outline" (click) = "dismissModal()">
+      x
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup] = "addExpenseForms" >
+
+    <ion-item>
+      <ion-input placeholder="Enter Amount" type="number" formControlName = "Amount"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-input placeholder="Type description" type="text" formControlName = "Description"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Select Type</ion-label>
+      <ion-select value = "" okText = "Ok" cancelText = "Cancel" formControlName = "Type" >
+        <ion-select-option value = "groceries">Groceries</ion-select-option>
+        <ion-select-option value = "general" >General</ion-select-option>
+        <ion-select-option value = shopping >Shopping</ion-select-option>
+        <ion-select-option value = other >Other</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col >
+          <ion-button color="primary" fill="solid" expand="block" (click)= "initCreateExpense()"
+          [disabled] = "!addExpenseForms.valid">
+           Add
+          </ion-button>
+       </ion-col>
+          
+      <!-- <ion-col size = "6">
+         <ion-button color="danger" fill="solid" expand = "block">
+           Cancel
+         </ion-button>
+       </ion-col> -->
+      </ion-row>
+    </ion-grid>
+      
+  </form>
+ 
+</ion-content>
+
