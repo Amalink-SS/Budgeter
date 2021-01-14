@@ -13,36 +13,6 @@ export class StorageService {
 
   constructor(private dateservice :DateService, private dataservice : DataService) { }
 
-  async saveExpenseToLocal(expense : ExpenseInterface) : Promise<void>{
-    const key  = this.dateservice.StringDate(expense.CreatedOn);
-    let todaysExpense : ExpenseInterface[] = [];
-   return await this.getObject(key).then((expenses : ExpenseInterface[]) => {
-      //debugger;
-      if(expenses == null){
-        todaysExpense.push(expense);
-      }
-      else{
-      todaysExpense = expenses;
-      todaysExpense.push(expense);
-    }
-
-    }).then(() => {
-             this.setObject(key,todaysExpense).then(() => {
-              this.dataservice.setExpenses(todaysExpense); 
-              });
-            
-    }).catch((err) => {
-      console.log(err)
-    })
-  }
-
-  async getExpenseFromStorage(date ?) : Promise<ExpenseInterface[]> {
-    const key = date ? this.dateservice.StringDate(date) : this.dateservice.StringDate();
-    return await this.getObject(key).then((expenses : ExpenseInterface[]) => {
-      return expenses;
-    });
-  }
-
 // JSON "set" example
 async setObject(key : string, value : any) {
  return await Plugins.Storage.set({
@@ -69,9 +39,6 @@ async getItem() {
   console.log('Got item: ', value);
 }
 
-async removeItem(key : string) : Promise<any> {
-  return await Plugins.Storage.remove({ key });
-}
 
 async keys() {
   const { keys } = await Plugins.Storage.keys();
@@ -81,6 +48,8 @@ async keys() {
 async clear(isReset ? : boolean) : Promise<void> {
  if(isReset){
    this.dataservice.setExpenses([]);
+   this.dataservice.setItems([]);
+   this.dataservice.setBudget([]);
  }
   return await Plugins.Storage.clear();
 }

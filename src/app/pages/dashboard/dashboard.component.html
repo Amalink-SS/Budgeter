@@ -3,7 +3,7 @@
     <ion-card no-margin>
       <ion-card-header color="primary">
         <ion-card-title class="ion-text-center">
-          Total : R300
+          Total : {{ todayTotal | currency:'ZAR'}}
         </ion-card-title>
         <ion-card-subtitle>
           {{selectedDate | date}}
@@ -20,25 +20,33 @@
           </ion-col>
   
           <ion-col size="3">
-            <ion-item lines = "none">
-              <ion-button expand="full" fill="clear">Date
+            <ion-button expand="full" fill="clear" (click) = "selected.open()">Date</ion-button>
+            <ion-item lines = "none" hidden>
                 <ion-datetime #selected 
                 (ionChange) = "changeSelectedDate(selected.value)" 
-                 min="2020" 
-                [max]="selectedDate.toISOString()"></ion-datetime>
-              </ion-button>
+                [min]="installDate" 
+                [max]="maxdate.toISOString()"></ion-datetime>
+              
             </ion-item>
          </ion-col>
   
          <ion-col size="3">
-           <ion-button expand="full" fill="clear">
+           <ion-button expand="full" fill="clear" (click) = "selectedtype.open()">
              Type
-           </ion-button>
+          </ion-button>
+             <ion-item hidden>
+              <ion-select value = "all" okText = "Ok" cancelText = "Cancel" #selectedtype >
+                <ion-select-option [value] = "type.value" *ngFor="let type of expensetypes | keyvalue">
+                  {{type.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>   
          </ion-col>
   
          <ion-col size="3">
-           <ion-button expand="full" fill="clear">
-             Amount
+           <ion-button expand="full" fill="clear" (click) = "priceFilter()">
+             <ion-icon name = "logo-usd"></ion-icon>
+             <ion-icon *ngIf="filterbyPrice" [name] = "filterbyPriceUp ? 'arrow-up' : 'arrow-down' "></ion-icon>
            </ion-button>
          </ion-col>
         </ion-row>
@@ -50,7 +58,7 @@
 
 <ion-content>
 
-  <ion-card *ngFor="let ex of expenses">
+  <ion-card *ngFor="let ex of expenses | category : selectedtype.value">
 
     <ion-toolbar color="primary">
       <ion-buttons slot="end">
@@ -87,7 +95,7 @@
   </ion-card>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click) = "presentModal()">
+    <ion-fab-button (click) = "presentModal()" color = "success">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

@@ -25,7 +25,7 @@ export class AddExpenseComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.addExpenseForms.value);
+   // console.log(this.addExpenseForms.value);
   }
 
   initCreateExpense() : void {

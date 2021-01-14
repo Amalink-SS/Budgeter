@@ -1,0 +1,20 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Add Budget</ion-title>
+        <ion-button slot="end" fill="clear" color="danger" (click)="dismissModal()">
+            <ion-icon name="close-circle-outline"></ion-icon>
+        </ion-button>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <form [formGroup]="addBudgetForm">
+        <ion-item>
+            <ion-input type="number" formControlName="AllocatedAmount" placeholder="Budget"> </ion-input>
+        </ion-item>
+
+        <br>
+        <ion-button color="primary" fill="clear" size="large" expand="block"
+                    (click)="initCreateBudget()">add</ion-button>
+    </form>
+  </ion-content>

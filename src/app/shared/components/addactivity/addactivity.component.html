@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-title>Add Item</ion-title>
+      <ion-button slot="end" fill="clear" color="danger" (click)="dismissModal()">
+          <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="addItemForm">
+      <ion-label color="danger" position="floating" *ngIf="addItemForm.controls.quantity.invalid && addItemForm.controls.quantity.touched">
+          Amount is Not Valid
+      </ion-label>
+      <ion-item>
+          <ion-input type="number" placeholder="Quantity" inputmode="decimal" formControlName="quantity" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+          <ion-textarea placeholder="Item name" type="text" formControlName="ItemName"></ion-textarea>
+      </ion-item>
+
+      <br>
+      <ion-button color="primary" fill="clear" size="large" expand="block"
+                  (click)="initCreateItem()" [disabled]="!addItemForm.valid">add</ion-button>
+  </form>
+</ion-content>

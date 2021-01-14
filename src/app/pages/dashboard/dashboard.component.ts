@@ -1,11 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {ModalController} from '@ionic/angular'
+import {ActionSheetController, ModalController} from '@ionic/angular'
 import { BehaviorSubject, SubscriptionLike } from 'rxjs';
+import { ExpenseTypes } from 'src/app/constants/constants';
 import { ExpenseInterface } from 'src/app/interfaces/expenseInterface';
 import { ActionService } from 'src/app/services/action/action.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { DateService } from 'src/app/services/date/date.service';
 import { AddExpenseComponent } from 'src/app/shared/components/add-expense/add-expense.component';
+import UserCredential = firebase.auth.UserCredential;
+import {AuthService} from '../../auth/services/auth/auth.service';
+import {AngularFireAuth} from '@angular/fire/auth';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,21 +24,45 @@ export class DashboardComponent implements OnInit , OnDestroy {
   selectedDate: Date;
   dateSubscription : SubscriptionLike;
   maxdate : Date;
+  expensetypes : any;
+
+  totalSubscription: SubscriptionLike
+  todayTotal : number
+  filterbyPrice : boolean
+  filterbyPriceUp : boolean
+
+  userCreds: UserCredential;
+  userCredsSubscription: SubscriptionLike;
 
   constructor(private modalcontroller : ModalController,
     private dataservice : DataService,
     private actionservice : ActionService,
-    private dateservice : DateService) {
-      actionservice.getCurrentExpensesFromLocal().then((expense) => 
-        this.expenses = expense
-      )
+    private dateservice : DateService,
+    private actionsheetcontroler : ActionSheetController,
+    private authService: AuthService,
+    private fireAuth: AngularFireAuth,) {
+      
       this.installDate =dateservice.installDate;
       this.maxdate = dateservice.getCurrentDate();
-      
-    
+      this.expensetypes = ExpenseTypes;
+        this.todayTotal = null
+
+       // console.log(this.installDate)
      }
 
+     
+
   ngOnInit() {
+    this.totalSubscription = this.dataservice.getTodayTotalExpense()
+        .subscribe({
+          next: (total: number) => {
+            this.todayTotal = total;
+          },   
+          error : (err) => {
+            console.log(err)
+          },
+          complete: () => {}
+        })
     this.dateSubscription = this.dateservice.getSelectedDateSubs()
         .subscribe({
           next: (date:Date) => {
@@ -55,7 +84,7 @@ export class DashboardComponent implements OnInit , OnDestroy {
     },
     error : (err) => {},
     complete: () => {}
-  });
+   });
   }
 
   async presentModal(){
@@ -81,5 +110,52 @@ export class DashboardComponent implements OnInit , OnDestroy {
       this.actionservice.getExpensesByDateFromLocal(this.dateservice.getCurrentDate());
     })
   }
+
+   priceFilter() : void {
+     this.expenses = this.expenses.sort((a,b) => { 
+      if(a.Amount > b.Amount) return this.filterbyPriceUp? 1:-1;
+      
+      if(b.Amount > a.Amount) return this.filterbyPriceUp? -1:1
+
+      return 0;
+      })
+      this.filterbyPrice = true
+      this.filterbyPriceUp = !this.filterbyPriceUp;
+   }
+
+ async presentfilterActionsheet(){
+   const actionsheet = await this.actionsheetcontroler.create({
+     header: 'filter' ,
+     buttons : [
+       {
+        text: "Price",
+        icon: "logo-usd",
+        handler: () => {
+         console.log('its that')
+       }
+      },
+      { text: "Recent",
+        icon: "",
+        handler: () => {
+         console.log('its that')
+        }
+      },
+        { text: "Cancel",
+          icon: "close",
+          role: "cancel",
+          handler: () => {
+           console.log('its that')
+          }
+        
+        }
+    ]
+   });
+   await actionsheet.present();
+ }
+ ngAfterViewInit(): void {
+  this.fireAuth.authState.subscribe((res) => {
+      console.log(res);
+  });
+ }
 
 }

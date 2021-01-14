@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccountComponent } from './account.component';
 import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 
 
@@ -9,7 +10,8 @@ import { RouterModule } from '@angular/router';
   declarations: [AccountComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([{path:'', component:AccountComponent}])
+    RouterModule.forChild([{path:'', component:AccountComponent}]),
+    IonicModule
   ]
 })
 export class AccountModule { }

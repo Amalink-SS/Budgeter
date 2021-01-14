@@ -4,35 +4,59 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
         path: 'dashboard',
-        loadChildren: () => import('../pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+          }
+        ]
       },
       {
         path: 'settings',
-        loadChildren: () => import('../pages/account/account.module').then(m => m.AccountModule)
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/account/account.module').then(m => m.AccountModule)
+          }
+        ]
       },
       {
         path: 'budget',
-        loadChildren: () => import('../pages/budget/budget.module').then(m => m.BudgetModule)
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/budget/budget.module').then(m => m.BudgetModule)
+          }
+        ]
       },
       {
         path: 'activity',
-        loadChildren: () => import('../pages/activity/activity.module').then(m => m.ActivityModule)
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/activity/activity.module').then(m => m.ActivityModule)
+          }
+        ]
       },
       {
         path: '',
-        redirectTo: '/tabs/dashboard',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/dashboard',
+    redirectTo: 'tabs',
     pathMatch: 'full'
   }
 ];

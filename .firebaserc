@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "budgeter-71392": {
+      "hosting": {
+        "app": [
+          "budgeter-71392"
+        ]
+      }
+    }
+  }
+}
