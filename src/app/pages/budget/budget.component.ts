@@ -16,6 +16,8 @@ export class BudgetComponent implements OnInit {
    value: number
   allocated : number
   difference : number
+  identifier : string
+  updatedBudget : number
   date:Date;
   totalBudgetSubscription: SubscriptionLike;
   usedFundsSubs : SubscriptionLike
@@ -24,7 +26,11 @@ export class BudgetComponent implements OnInit {
      this.date = dateservice.getCurrentDate();
     // this.value = dataservice.calculateTotalExpense(this.expense)
     //this.allocated = 
-    this.value ;
+	this.value ;
+	this.allocated;
+	this.difference;
+  this.identifier;
+  this.updatedBudget;
   }
 
   ngOnInit() {
@@ -45,8 +51,17 @@ export class BudgetComponent implements OnInit {
     this.usedFundsSubs = this.dataservice.getTodayTotalExpense()
         .subscribe({
           next: (count: number) => {
-            console.log(count)
-            this.allocated = count;
+           // console.log(count)
+		   	this.allocated = count;
+        this.difference = this.value - this.allocated;
+        this.updatedBudget = Math.abs(this.difference);
+        if(this.difference < 0){
+          console.log(this.difference)
+          return this.identifier = "You are beyond your budget"
+        }else
+          return this.identifier = "You maintained your budget"
+        
+
           },   
           error : (err) => {
             console.log(err)
@@ -54,12 +69,9 @@ export class BudgetComponent implements OnInit {
           complete: () => {}
         })
 
-     this.difference = this.value - this.allocated 
-     if(this.date !== this.dateservice.getCurrentDate()){
-       this.value = this.difference
-       this.allocated = 0
-       this.difference = this.value-this.allocated
-     } 
+
+      
+     
     // console.log("the balance",this.difference) 
   }
 

@@ -6,6 +6,9 @@
            Budget : {{value | currency:'ZAR'}}
          </ion-card-title>
          <ion-card-subtitle>
+            Updated Budget {{updatedBudget | currency:'ZAR'}}
+         </ion-card-subtitle>
+         <ion-card-subtitle>
             {{date | date}}
           </ion-card-subtitle>
           
@@ -31,9 +34,15 @@
   <ion-card-header color="tertiary">
   
    <ion-card-title>
-     Balance: {{value - allocated | currency:'ZAR'}}
+     Balance: {{ difference | currency:'ZAR'}}
    </ion-card-title>
   
+  </ion-card-header> 
+</ion-card>
+
+<ion-card no-margin>
+  <ion-card-header color="secondary">
+   {{identifier}} 
   </ion-card-header> 
 </ion-card>
 

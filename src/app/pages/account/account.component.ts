@@ -37,8 +37,8 @@ async presentResetAlert(handler?: any) {
         id: 'appResetAlert',
         header: 'App Reset Successful!',
         buttons: [{
-            text: 'Back To Dashboard3',
-            handler
+            text: 'Dashboard',
+            handler 
         }],
     });
     await alert.present();

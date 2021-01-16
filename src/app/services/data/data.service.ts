@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { random } from 'lodash';
+import { difference, random } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { Budget } from 'src/app/interfaces/budgetinterface';
 import { ExpenseInterface } from 'src/app/interfaces/expenseInterface';
@@ -16,6 +16,7 @@ export class DataService {
   private readonly _todayTotalExpense : BehaviorSubject<number>;
   private readonly _todayTotalItems : BehaviorSubject<number>;
   private readonly _todayTotalBudget : BehaviorSubject<number>;
+  private readonly _difference : BehaviorSubject<number>;
 
   constructor() {
     this._expenses = new BehaviorSubject<ExpenseInterface[]>(null);
@@ -24,6 +25,7 @@ export class DataService {
     this._todayTotalItems = new BehaviorSubject<number>(0)
     this._budget = new BehaviorSubject<Budget[]>(null);
     this._todayTotalBudget = new BehaviorSubject<number>(0)
+    this._difference = new BehaviorSubject<number>(0)
    }
 
    getTodayTotalExpense(): BehaviorSubject<number>{
@@ -50,6 +52,15 @@ getTodayTotalBudget(): BehaviorSubject<number>{
   return this._todayTotalBudget;
 }
 
+
+async setTodaydifference(total : number): Promise<void>{
+  return this._difference.next(total);
+}
+
+getTodaydifference(): BehaviorSubject<number>{
+return this._difference;
+}
+
   async getExpenses(): Promise< ExpenseInterface[]> {
     return this._expenses.getValue();
   }
@@ -59,7 +70,17 @@ getTodayTotalBudget(): BehaviorSubject<number>{
       this.setTodayTotalExpense(this.calculateTotalExpense(expenses))
    return this._expenses.next(expenses);
   }
+
+  async getDiffence(): Promise<number> {
+    return this._difference.getValue();
+  }
   
+  async setDifference(budget:Budget[],expenses : ExpenseInterface[]): Promise<void> {
+    if(expenses && budget)
+      this.setTodaydifference(this.calculateDifference(budget,expenses))
+    //  return this._difference.next(difference(budget.forEach(),expenses)
+
+  }
 
   async getBudget(): Promise<Budget[]> {
     return this._budget.getValue();
@@ -103,6 +124,11 @@ getTodayTotalBudget(): BehaviorSubject<number>{
     total += bud.AllocatedAmount;
   }
   return total
+}
+
+calculateDifference(budget:Budget[],expense:ExpenseInterface[]){
+  let diff = 0;
+  return diff = this.calculateBudget(budget) - this.calculateTotalExpense(expense)
 }
 
  calculateTotalItems(items : ShoppinglistInterface[]): number {
