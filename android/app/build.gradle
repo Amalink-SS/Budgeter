@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    buildToolsVersion '29.0.2'
+    compileSdkVersion targetSdkVersion
     defaultConfig {
         applicationId "io.github.amalink"
         minSdkVersion rootProject.ext.minSdkVersion
