@@ -55,6 +55,8 @@ export class BudgetComponent implements OnInit {
 		   	this.allocated = count;
         this.difference = this.value - this.allocated;
         this.updatedBudget = Math.abs(this.difference);
+
+
         if(this.difference < 0){
           console.log(this.difference)
           return this.identifier = "You are beyond your budget"
@@ -69,10 +71,6 @@ export class BudgetComponent implements OnInit {
           complete: () => {}
         })
 
-
-      
-     
-    // console.log("the balance",this.difference) 
   }
 
   async presentModal(){
